@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustVendor | B2B Vendor Onboarding & Compliance Portal</title>
+  
+  <!-- Inter Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5.3 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
+  <!-- Bootstrap Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Corporate Trust Design System CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       WEEK 2: Bootstrap Toast System
+       Fixed floating toast container (position-fixed top-0 end-0 p-3)
+       ========================================================================= -->
+  <div id="portalToastContainer" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090;" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="app-container">
+    <div class="container-fluid p-0">
+      
+      <!-- =====================================================================
+           VIEW PANEL 1: #view-auth (Role Selection / Interactive Login View)
+           WEEK 1 & 2 Deliverables: Hybrid Firebase Auth & 4-Tier Chain of Command
+           ===================================================================== -->
+      <section id="view-auth" class="portal-view-container" aria-label="Role Selection and Authentication Portal">
+        <div class="auth-container p-3 p-md-5">
+          <div class="container" style="max-width: 960px;">
+            
+            <!-- Auth Branding Header -->
+            <div class="text-center mb-4">
+              <div class="d-inline-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-shield-check text-primary fs-1"></i>
+                <span class="fw-bold fs-2 text-dark tracking-wide">TrustVendor</span>
+              </div>
+              <h1 class="h4 fw-bold text-dark mb-2">B2B Vendor Onboarding & Compliance Portal</h1>
+              <p class="text-muted mx-auto" style="max-width: 620px;">
+                Enterprise multi-tenant regulatory verification platform. Enforcing 4-tier chain of command, automated document expiration calculations, heuristic risk tiers, and partitioned LocalDB persistence.
+              </p>
+              <div class="d-flex flex-wrap justify-content-center gap-2 mb-2">
+                <span class="badge bg-light text-muted border px-3 py-1">Project ID: PST_PD_116</span>
+                <span class="badge bg-light text-muted border px-3 py-1">Batch 2026 Level 2</span>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1">Offline Firebase Auth &amp; LocalDB</span>
+              </div>
+              
+              <!-- Offline Firebase Authentication Engine Indicator -->
+              <div class="mt-2">
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">
+                  <i class="bi bi-shield-lock-fill me-1"></i> Offline Firebase Auth Engine (Self-Contained LocalDB)
+                </span>
+              </div>
+            </div>
+
+            <!-- 1-Click Quick Demo Persona Login Pills -->
+            <div class="card border-primary-subtle bg-light shadow-sm p-3 mb-4">
+              <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+                <div>
+                  <span class="fw-bold text-dark small"><i class="bi bi-lightning-charge-fill text-warning me-1"></i> Quick Demo Persona Switcher:</span>
+                  <div class="text-muted small" style="font-size:0.75rem;">Instant 1-click authentication into each 4-tier role hierarchy level:</div>
+                </div>
+                <div class="d-flex flex-wrap gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-dark" data-demo-login="superadmin" title="Pre-Set Root Super Admin">
+                    <i class="bi bi-shield-shaded me-1 text-purple"></i> Super Admin
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-demo-login="admin" title="Operations Admin">
+                    <i class="bi bi-shield-lock me-1"></i> Operations Admin
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success" data-demo-login="manager" title="Procurement Manager">
+                    <i class="bi bi-shield-check me-1"></i> Procurement Manager
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary" data-demo-login="vendor-approved" title="Approved External Vendor">
+                    <i class="bi bi-building-check me-1"></i> Approved Vendor
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-warning text-dark" data-demo-login="vendor-pending" title="Vendor Pending Approval (Holding Screen)">
+                    <i class="bi bi-hourglass-split me-1"></i> Pending Vendor
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hybrid Firebase Auth & Credential Card -->
+            <div class="row justify-content-center mb-5">
+              <div class="col-md-10 col-lg-8">
+                <div class="portal-card shadow-sm">
+                  <div class="portal-card-header bg-white pb-0 border-bottom-0">
+                    <ul class="nav nav-tabs card-header-tabs" id="authTabs" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-bold text-dark" id="authTabSignInBtn" data-bs-toggle="tab" data-bs-target="#authTabSignIn" type="button" role="tab" aria-controls="authTabSignIn" aria-selected="true">
+                          <i class="bi bi-box-arrow-in-right me-1 text-primary"></i> Sign In
+                        </button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold text-dark" id="authTabSignUpBtn" data-bs-toggle="tab" data-bs-target="#authTabSignUp" type="button" role="tab" aria-controls="authTabSignUp" aria-selected="false">
+                          <i class="bi bi-person-plus-fill me-1 text-success"></i> Create Account (Sign Up)
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="portal-card-body p-4">
+                    <div class="tab-content" id="authTabsContent">
+                      
+                      <!-- TAB 1: SIGN IN -->
+                      <div class="tab-pane fade show active" id="authTabSignIn" role="tabpanel" aria-labelledby="authTabSignInBtn">
+                        <form id="authSignInForm" novalidate>
+                          <div class="alert alert-light border small text-muted d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+                            <div>
+                              <strong>Hard-Coded Super Admin Interceptor:</strong> Use <code>superadmin@trustvendor.com</code> / <code>SuperAdmin2026!</code> for pre-set root authority.
+                            </div>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="signInEmail" class="form-label small fw-semibold text-secondary">
+                              Email Address <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                              <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                              <input type="email" class="form-control" id="signInEmail" placeholder="name@company.com" required>
+                              <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="signInPassword" class="form-label small fw-semibold text-secondary">
+                              Password <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                              <span class="input-group-text bg-light"><i class="bi bi-key"></i></span>
+                              <input type="password" class="form-control" id="signInPassword" placeholder="••••••••" required>
+                              <div class="invalid-feedback">Please enter your password.</div>
+                            </div>
+                          </div>
+
+                          <button type="submit" class="btn btn-portal-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2" id="btnSignInSubmit">
+                            <span class="spinner-border spinner-border-sm d-none" id="signInSpinner" role="status" aria-hidden="true"></span>
+                            <span>Sign In to Account</span>
+                            <i class="bi bi-arrow-right"></i>
+                          </button>
+                        </form>
+                      </div>
+
+                      <!-- TAB 2: SIGN UP WITH HIERARCHICAL APPROVAL ROUTING -->
+                      <div class="tab-pane fade" id="authTabSignUp" role="tabpanel" aria-labelledby="authTabSignUpBtn">
+                        <form id="authSignUpForm" novalidate>
+                          <div class="alert alert-info border-info small mb-3">
+                            <i class="bi bi-diagram-3-fill me-1"></i>
+                            <strong>Hierarchical Approval Routing:</strong> Registrations are placed in <code>PENDING_APPROVAL</code> status and routed to the respective management tier for verification before access is granted.
+                          </div>
+
+                          <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                              <label for="signUpName" class="form-label small fw-semibold text-secondary">Full Legal Name <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control form-control-sm" id="signUpName" placeholder="e.g. David Miller" required>
+                              <div class="invalid-feedback">Name is required.</div>
+                            </div>
+                            <div class="col-md-6">
+                              <label for="signUpEmail" class="form-label small fw-semibold text-secondary">Work Email <span class="text-danger">*</span></label>
+                              <input type="email" class="form-control form-control-sm" id="signUpEmail" placeholder="name@company.com" required>
+                              <div class="invalid-feedback">Valid email required.</div>
+                            </div>
+                          </div>
+
+                          <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                              <label for="signUpPassword" class="form-label small fw-semibold text-secondary">Password <span class="text-danger">*</span></label>
+                              <input type="password" class="form-control form-control-sm" id="signUpPassword" placeholder="Min. 6 characters" minlength="6" required>
+                              <div class="invalid-feedback">At least 6 characters required.</div>
+                            </div>
+                            <div class="col-md-6">
+                              <label for="signUpRole" class="form-label small fw-semibold text-secondary">Requested Role <span class="text-danger">*</span></label>
+                              <select class="form-select form-select-sm" id="signUpRole" required>
+                                <option value="vendor" selected>External Vendor (Routes to Procurement Manager)</option>
+                                <option value="manager">Procurement Manager (Routes to Operations Admin)</option>
+                                <option value="admin">Operations Admin (Routes to Super Admin)</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                              <label for="signUpCompany" class="form-label small fw-semibold text-secondary">Organization / Company Name <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control form-control-sm" id="signUpCompany" placeholder="e.g. Acme Logistics LLC" required>
+                              <div class="invalid-feedback">Company name is required.</div>
+                            </div>
+                            <div class="col-md-6">
+                              <label for="signUpCategory" class="form-label small fw-semibold text-secondary">Business Category</label>
+                              <select class="form-select form-select-sm" id="signUpCategory">
+                                <option value="Logistics / Freight">Logistics / Freight</option>
+                                <option value="IT / Cloud Services">IT / Cloud Services</option>
+                                <option value="Manufacturing / Raw Materials">Manufacturing / Raw Materials</option>
+                                <option value="Consulting / Professional Services">Consulting / Professional Services</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <button type="submit" class="btn btn-success w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2" id="btnSignUpSubmit">
+                            <span class="spinner-border spinner-border-sm d-none" id="signUpSpinner" role="status" aria-hidden="true"></span>
+                            <span>Register &amp; Submit for Approval</span>
+                            <i class="bi bi-send-check"></i>
+                          </button>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Role Selection Cards Grid with Visual Active States (Preserved from UI Wireframes) -->
+            <div class="row g-4 justify-content-center">
+              
+              <!-- Persona 1: External Vendor POC Card -->
+              <div class="col-md-6">
+                <div class="auth-role-card shadow-sm border-primary bg-primary-subtle bg-opacity-10" id="authCardVendor" style="cursor: pointer;">
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="auth-icon-wrapper auth-icon-vendor mb-0">
+                      <i class="bi bi-building-check"></i>
+                    </div>
+                    <span id="authBadgeVendor" class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2">
+                      <i class="bi bi-check-circle-fill me-1"></i> Active Selection
+                    </span>
+                  </div>
+
+                  <h2 class="h5 fw-bold text-dark mb-1">External Vendor POC</h2>
+                  <p class="text-muted small mb-3">
+                    Submit corporate details, dynamic category compliance packs, quota-safe PDF certifications, and track review status.
+                  </p>
+
+                  <ul class="list-unstyled small text-secondary mb-4 flex-grow-1">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 3-Step Dynamic Onboarding Form</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Category-Driven Dynamic Document Checklist</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Promise-Based Mock EIN Verification</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Real-Time Dossier Status Tracker</li>
+                  </ul>
+
+                  <button type="button" class="btn btn-portal-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2" id="btnEnterVendor" data-auth-role="vendor" data-demo-login="vendor-approved">
+                    <span>Enter as External Vendor</span>
+                    <i class="bi bi-arrow-right"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Persona 2: Procurement Manager Card -->
+              <div class="col-md-6">
+                <div class="auth-role-card shadow-sm border-slate-200" id="authCardManager" style="cursor: pointer;">
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="auth-icon-wrapper auth-icon-manager mb-0">
+                      <i class="bi bi-shield-check"></i>
+                    </div>
+                    <span id="authBadgeManager" class="badge bg-primary-subtle text-primary border border-primary-subtle py-1 px-2 d-none">
+                      <i class="bi bi-check-circle-fill me-1"></i> Active Selection
+                    </span>
+                  </div>
+
+                  <h2 class="h5 fw-bold text-dark mb-1">Procurement Manager</h2>
+                  <p class="text-muted small mb-3">
+                    Access master compliance dashboard, 30/60/90-day expiration horizons, review queues, Approve/Reject gates, and audit logs.
+                  </p>
+
+                  <ul class="list-unstyled small text-secondary mb-4 flex-grow-1">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Centralized Vendor Directory & Search</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Conservative 1-Expired-Doc = Blocked Rule</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Tier 1–3 Heuristic Risk Monitoring</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Executive PDF & CSV Data Exports</li>
+                  </ul>
+
+                  <button type="button" class="btn btn-portal-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2" id="btnEnterManager" data-auth-role="manager" data-demo-login="manager">
+                    <span>Enter as Procurement Manager</span>
+                    <i class="bi bi-arrow-right"></i>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Team Attribution Footer -->
+            <div class="text-center mt-5 text-muted small">
+              Frontend UI/UX Engineering: <strong>Mohd. Maaz Khan</strong> • Data Engine & LocalDB: <strong>Abhinaba Das</strong>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           AUTHENTICATED PORTAL SHELL (Visible when Role is active)
+           ===================================================================== -->
+      <div class="row g-0 d-none" id="portalAppShell">
+        
+        <!-- -------------------------------------------------------------------
+             DESKTOP VIEW (≥ 992px): Fixed, Sticky Navy Sidebar (.sticky-top)
+             ------------------------------------------------------------------- -->
+        <aside class="col-lg-3 col-xl-2 portal-sidebar sticky-top d-none d-lg-flex flex-column p-3" id="sidebarMenu" aria-label="Desktop Primary Navigation">
+          
+          <!-- Brand Logo & Project ID -->
+          <div class="d-flex align-items-center justify-content-between mb-3 px-2 pt-1">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-shield-check text-info fs-3"></i>
+              <div>
+                <span class="fw-bold fs-5 text-white tracking-wide">TrustVendor</span>
+                <div class="brand-badge mt-1">ID: PST_PD_116</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role Indicator Pill in Sidebar -->
+          <div class="px-2 mb-3">
+            <div id="sidebarRoleBadge" class="role-pill role-pill-manager w-100 text-center justify-content-center">
+              <i class="bi bi-shield-check"></i> Procurement Manager
+            </div>
+          </div>
+
+          <hr class="border-secondary opacity-25 my-1">
+
+          <!-- Core Navigation Links: Dashboard, Compliance, Analytics, Settings -->
+          <nav class="nav flex-column flex-grow-1 py-2" aria-label="Sidebar Menu Links">
+            <div class="text-uppercase text-muted fw-bold small px-3 mb-2" style="font-size:0.7rem; letter-spacing:0.08em;">Navigation</div>
+            
+            <a href="#" class="nav-link active" data-portal-nav="dashboard" id="sideNavDashboard" aria-label="Go to Dashboard">
+              <i class="bi bi-grid-1x2-fill"></i>
+              <span>Dashboard</span>
+            </a>
+
+            <a href="#" class="nav-link" data-portal-nav="compliance" id="sideNavCompliance" aria-label="Go to Compliance Register">
+              <i class="bi bi-shield-lock-fill"></i>
+              <span>Compliance</span>
+            </a>
+
+            <a href="#" class="nav-link" data-portal-nav="analytics" id="sideNavAnalytics" aria-label="Go to Executive Analytics">
+              <i class="bi bi-bar-chart-line-fill"></i>
+              <span>Analytics</span>
+            </a>
+
+            <a href="#" class="nav-link" data-portal-nav="settings" id="sideNavSettings" aria-label="Go to System Settings and LocalDB State">
+              <i class="bi bi-gear-wide-connected"></i>
+              <span>Settings</span>
+            </a>
+          </nav>
+
+          <!-- Sidebar User Profile Badge & Persona Switcher -->
+          <div class="pt-3 border-top border-secondary border-opacity-25">
+            <div class="user-profile-badge d-flex align-items-center justify-content-between mb-2">
+              <div class="d-flex align-items-center gap-2 overflow-hidden">
+                <div class="user-avatar-circle flex-shrink-0" id="sidebarUserAvatar">MK</div>
+                <div class="text-truncate">
+                  <div class="fw-bold text-white small text-truncate" id="sidebarUserName">Mohd. Maaz Khan</div>
+                  <div class="text-muted small" style="font-size:0.75rem;" id="sidebarUserRole">Sr. Procurement Lead</div>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2 py-1" data-action-logout aria-label="Switch User Role or Logout">
+              <i class="bi bi-arrow-left-right"></i>
+              <span>Switch Role / Logout</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- -------------------------------------------------------------------
+             MOBILE VIEW (< 992px): Sleek Top Navbar & Offcanvas Drawer
+             ------------------------------------------------------------------- -->
+        <div class="offcanvas offcanvas-start portal-offcanvas" tabindex="-1" id="mobileSidebarOffcanvas" aria-labelledby="mobileSidebarLabel">
+          <div class="offcanvas-header border-bottom border-secondary border-opacity-25 pb-3">
+            <div class="d-flex align-items-center gap-2" id="mobileSidebarLabel">
+              <i class="bi bi-shield-check text-info fs-4"></i>
+              <span class="fw-bold text-white fs-5">TrustVendor</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close Mobile Menu"></button>
+          </div>
+          <div class="offcanvas-body d-flex flex-column p-3">
+            <nav class="nav flex-column flex-grow-1" aria-label="Mobile Navigation Menu">
+              <div class="text-uppercase text-muted fw-bold small px-3 mb-2" style="font-size:0.7rem;">Navigation Menu</div>
+              <a href="#" class="nav-link active" data-portal-nav="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i> Dashboard
+              </a>
+              <a href="#" class="nav-link" data-portal-nav="compliance">
+                <i class="bi bi-shield-lock-fill"></i> Compliance
+              </a>
+              <a href="#" class="nav-link" data-portal-nav="analytics">
+                <i class="bi bi-bar-chart-line-fill"></i> Analytics
+              </a>
+              <a href="#" class="nav-link" data-portal-nav="settings">
+                <i class="bi bi-gear-wide-connected"></i> Settings
+              </a>
+            </nav>
+
+            <div class="pt-3 border-top border-secondary border-opacity-25">
+              <button type="button" class="btn btn-outline-light btn-sm w-100 py-2" data-action-logout>
+                <i class="bi bi-arrow-left-right me-1"></i> Switch Role / Logout
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- -------------------------------------------------------------------
+             MAIN CONTENT WORKSPACE SHELL
+             ------------------------------------------------------------------- -->
+        <div class="col-lg-9 col-xl-10 d-flex flex-column min-vh-100">
+          
+          <!-- Topbar Header (Sticky) -->
+          <header class="portal-topbar d-flex align-items-center justify-content-between" id="portalTopbar">
+            <div class="d-flex align-items-center gap-3">
+              <!-- Mobile Hamburger Toggle Button (< 992px) -->
+              <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button" id="mobileSidebarToggle" aria-label="Open Navigation Menu">
+                <i class="bi bi-list fs-5"></i>
+              </button>
+
+              <div>
+                <h1 class="h5 fw-bold text-dark mb-0" id="topbarTitle">Procurement Compliance Dashboard</h1>
+                <div class="text-muted small d-none d-sm-block">B2B Vendor Onboarding & Regulatory Risk System</div>
+              </div>
+            </div>
+
+            <!-- Role Indicator & Quick Persona Switcher -->
+            <div class="d-flex align-items-center gap-2">
+              <span id="topbarRoleBadge" class="role-pill role-pill-manager d-none d-sm-inline-flex">
+                <i class="bi bi-shield-check"></i> Procurement Manager
+              </span>
+
+              <button type="button" class="btn btn-sm btn-outline-secondary" data-action-logout aria-label="Switch Persona Role">
+                <i class="bi bi-arrow-left-right me-1"></i> Switch Role
+              </button>
+            </div>
+          </header>
+
+          <!-- Main Viewport Panes -->
+          <main class="flex-grow-1 p-3 p-md-4">
+
+            <!-- ===============================================================
+                 VIEW PANEL: #view-pending (Account Pending Approval Holding Screen)
+                 WEEK 2 Deliverable: Holding screen for PENDING_APPROVAL accounts
+                 =============================================================== -->
+            <section id="view-pending" class="portal-view-container d-none" aria-label="Account Pending Approval Holding Screen">
+              <div class="row justify-content-center pt-4">
+                <div class="col-md-9 col-lg-7">
+                  <div class="portal-card shadow-sm" id="pendingHoldingCard">
+                    <div class="portal-card-header bg-warning-subtle text-warning-emphasis border-bottom border-warning-subtle d-flex align-items-center gap-2">
+                      <i class="bi bi-hourglass-split fs-4"></i>
+                      <h2 class="h6 fw-bold mb-0">Account Registration Under Administrative Review</h2>
+                    </div>
+                    <div class="portal-card-body p-4">
+                      <div class="text-center mb-4">
+                        <div class="display-6 text-warning mb-2">
+                          <i class="bi bi-clock-history"></i>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark mb-1">Registration Pending Approval</h3>
+                        <p class="text-muted small">
+                          Your profile has been created and routed hierarchically for verification in accordance with corporate governance policies.
+                        </p>
+                      </div>
+
+                      <div class="card bg-light border mb-4">
+                        <div class="card-body p-3">
+                          <div class="row g-2 small">
+                            <div class="col-6 text-muted">User Account:</div>
+                            <div class="col-6 fw-bold text-dark" id="pendingUserEmail">--</div>
+                            <div class="col-6 text-muted">Applicant Name:</div>
+                            <div class="col-6 fw-bold text-dark" id="pendingUserName">--</div>
+                            <div class="col-6 text-muted">Requested Tier:</div>
+                            <div class="col-6"><span class="badge bg-secondary" id="pendingUserRole">--</span></div>
+                            <div class="col-6 text-muted">Organization:</div>
+                            <div class="col-6 fw-bold text-dark" id="pendingUserCompany">--</div>
+                            <div class="col-6 text-muted">Submission Timestamp:</div>
+                            <div class="col-6 text-dark" id="pendingSubmitDate">--</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="alert alert-info border-info d-flex align-items-start gap-2 small mb-4">
+                        <i class="bi bi-shield-check fs-5 text-primary flex-shrink-0"></i>
+                        <div id="pendingApproverInfo">
+                          Awaiting review by the designated management approver.
+                        </div>
+                      </div>
+
+                      <div class="d-flex flex-column flex-sm-row justify-content-between gap-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-action-logout>
+                          <i class="bi bi-box-arrow-left me-1"></i> Sign Out
+                        </button>
+                        <button type="button" class="btn btn-portal-primary btn-sm" id="btnPendingCheckStatus">
+                          <i class="bi bi-arrow-clockwise me-1"></i> Check Approval Status
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW PANEL: #view-superadmin (Super Admin Governance Portal)
+                 WEEK 1 & 2 Deliverables: Root Super Admin Dashboard & Admin Queue
+                 =============================================================== -->
+            <section id="view-superadmin" class="portal-view-container d-none" aria-label="Super Admin Governance Portal">
+              <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="role-pill role-pill-superadmin">Root Governance</span>
+                    <h2 class="h5 fw-bold text-dark mb-0">Super Admin Command Center</h2>
+                  </div>
+                  <div class="text-muted small">Manage enterprise operational administrators, audit logs, and root system settings.</div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#systemSettingsModal">
+                  <i class="bi bi-gear-wide-connected me-1"></i> System Settings &amp; LocalDB
+                </button>
+              </div>
+
+              <!-- Super Admin KPIs -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                  <div class="portal-card p-3 border-warning-subtle">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="kpi-title text-warning-emphasis">Pending Admin Approvals</div>
+                        <div class="kpi-value text-warning-emphasis mt-1" id="superAdminKpiPending">0</div>
+                      </div>
+                      <i class="bi bi-person-check fs-1 text-warning opacity-50"></i>
+                    </div>
+                    <small class="text-muted">Awaiting root authority verification</small>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="portal-card p-3 border-success-subtle">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="kpi-title text-success">Approved Enterprise Staff</div>
+                        <div class="kpi-value text-success mt-1" id="superAdminKpiStaff">0</div>
+                      </div>
+                      <i class="bi bi-people-fill fs-1 text-success opacity-50"></i>
+                    </div>
+                    <small class="text-muted">Active Operations Admins &amp; Managers</small>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="portal-card p-3 border-info-subtle">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="kpi-title text-info-emphasis">Immutable Audit Events</div>
+                        <div class="kpi-value text-info-emphasis mt-1" id="superAdminKpiAudits">0</div>
+                      </div>
+                      <i class="bi bi-journal-text fs-1 text-info opacity-50"></i>
+                    </div>
+                    <small class="text-muted">Chronological LocalDB audit log entries</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Admin Approval Queue Table -->
+              <div class="portal-card mb-4">
+                <div class="portal-card-header bg-white d-flex justify-content-between align-items-center">
+                  <div>
+                    <h3 class="h6 fw-bold text-dark mb-0">Operations Admin Approval Queue</h3>
+                    <div class="text-muted small">Review and approve newly registered Operations Administrator accounts</div>
+                  </div>
+                  <span class="badge bg-primary">4-Tier Chain: Tier 1 &gt; Tier 2</span>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-portal align-middle table-hover mb-0" aria-label="Admin Approval Queue Table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Admin Candidate</th>
+                        <th scope="col">Branch / Division</th>
+                        <th scope="col">Submission Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="superAdminQueueTableBody">
+                      <!-- Populated dynamically by app.js -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW PANEL: #view-admin (Operations Admin Workspace)
+                 WEEK 1 & 2 Deliverables: Admin Approvals for Managers & Vendors
+                 =============================================================== -->
+            <section id="view-admin" class="portal-view-container d-none" aria-label="Operations Admin Workspace">
+              <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="role-pill role-pill-admin">Operations Admin</span>
+                    <h2 class="h5 fw-bold text-dark mb-0">Enterprise Operations Admin Portal</h2>
+                  </div>
+                  <div class="text-muted small">Supervise procurement managers, vendor registrations, and operational compliance.</div>
+                </div>
+              </div>
+
+              <!-- Admin KPIs -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <div class="portal-card p-3">
+                    <div class="kpi-title text-warning-emphasis">Procurement Managers Pending Review</div>
+                    <div class="kpi-value text-warning-emphasis mt-1" id="adminKpiPendingManagers">0</div>
+                    <small class="text-muted">Requires Operations Admin authorization</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="portal-card p-3">
+                    <div class="kpi-title text-info-emphasis">Vendor Sign-Ups Pending Escalation</div>
+                    <div class="kpi-value text-info-emphasis mt-1" id="adminKpiPendingVendors">0</div>
+                    <small class="text-muted">Unassigned vendor onboarding requests</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Manager Approval Queue Table -->
+              <div class="portal-card mb-4">
+                <div class="portal-card-header bg-white">
+                  <h3 class="h6 fw-bold text-dark mb-0">Procurement Manager Approval Queue</h3>
+                  <div class="text-muted small">Authorize Procurement Leads to manage vendor onboarding policies</div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-portal align-middle table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col">Manager Applicant</th>
+                        <th scope="col">Procurement Unit</th>
+                        <th scope="col">Application Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="adminManagerQueueTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Vendor Escalation Queue Table -->
+              <div class="portal-card mb-4">
+                <div class="portal-card-header bg-white">
+                  <h3 class="h6 fw-bold text-dark mb-0">Vendor Sign-Up Escalations</h3>
+                  <div class="text-muted small">Direct approval fallback for unassigned external vendors</div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-portal align-middle table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col">Vendor Company</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Registration Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="adminVendorQueueTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===============================================================
+                 VIEW PANEL 2: #view-vendor (Vendor Onboarding & Status Portal)
+                 WEEK 2 Deliverables: Multi-Step Form UI & Dynamic Progress Bar
+                 =============================================================== -->
+            <section id="view-vendor" class="portal-view-container d-none" aria-label="Vendor Portal Workspace">
+              
+              <!-- Sub-tab Selector Pills -->
+              <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                  <h2 class="h5 fw-bold text-dark mb-1">Vendor Onboarding &amp; Compliance Workspace</h2>
+                  <div class="text-muted small">Submit regulatory documentation and monitor approval progress.</div>
+                </div>
+
+                <ul class="nav nav-pills" id="vendorSubTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active btn-sm" id="tabVendorWizardBtn" data-bs-toggle="pill" data-bs-target="#vendorTabWizard" type="button" role="tab" aria-controls="vendorTabWizard" aria-selected="true">
+                      <i class="bi bi-ui-checks-grid me-1"></i> 1. Onboarding Wizard
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-sm" id="tabVendorStatusBtn" data-bs-toggle="pill" data-bs-target="#vendorTabStatus" type="button" role="tab" aria-controls="vendorTabStatus" aria-selected="false">
+                      <i class="bi bi-shield-check me-1"></i> 2. Compliance Status Tracker
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Manager-Specified Submission Deadline Countdown Banner -->
+              <div id="vendorDeadlineBanner" class="alert alert-info border-info d-flex align-items-center gap-3 mb-4 d-none" role="alert">
+                <i class="bi bi-alarm-fill fs-3 text-primary flex-shrink-0"></i>
+                <div class="flex-grow-1" id="vendorCountdownText">
+                  <!-- Injected dynamically by app.js -->
+                </div>
+              </div>
+
+              <div class="tab-content" id="vendorSubTabsContent">
+                
+                <!-- Sub-tab 1: Onboarding Wizard Form -->
+                <div class="tab-pane fade show active" id="vendorTabWizard" role="tabpanel" aria-labelledby="tabVendorWizardBtn">
+                  <div class="row justify-content-center">
+                    <div class="col-xl-9 col-lg-11">
+                      
+                      <div class="portal-card mb-4" id="vendorWizardCard">
+                        <div class="portal-card-header">
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                              <h3 class="h6 fw-bold text-dark mb-0">Multi-Step Vendor Onboarding & Compliance Certification</h3>
+                              <div class="text-muted small">All fields marked with an asterisk (<span class="text-danger">*</span>) are mandatory.</div>
+                            </div>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 fw-semibold">
+                              <i class="bi bi-stopwatch me-1"></i> Est. Time: 2 min
+                            </span>
+                          </div>
+
+                          <!-- WEEK 2: Visual Progress Bar Component (.progress) -->
+                          <div class="mt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                              <span class="small fw-semibold text-dark">Overall Onboarding Progress:</span>
+                              <span class="small fw-bold text-primary" id="progressPercentLabel">Dynamic Completion</span>
+                            </div>
+                            <div class="progress" style="height: 12px;" role="progressbar" aria-label="Onboarding Completion Progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" id="onboardingProgressBar" style="width: 0%; font-size: 0.72rem;">0% Completed</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="portal-card-body p-4">
+                          
+                          <!-- Stepper Header Navigation Indicators (3-Step Sequence) -->
+                          <nav class="stepper-nav mb-4" aria-label="Onboarding Steps Progress">
+                            <div class="stepper-nav-progress" id="stepperNavProgressBar" style="width: 0%;"></div>
+                            
+                            <div class="stepper-item active" id="stepperItem_1">
+                              <div class="stepper-circle">1</div>
+                              <span class="stepper-label">Company & Tax Info</span>
+                            </div>
+                            <div class="stepper-item" id="stepperItem_2">
+                              <div class="stepper-circle">2</div>
+                              <span class="stepper-label">Compliance Documents</span>
+                            </div>
+                            <div class="stepper-item" id="stepperItem_3">
+                              <div class="stepper-circle">3</div>
+                              <span class="stepper-label">Review & Submit</span>
+                            </div>
+                          </nav>
+
+                          <!-- Dynamic Onboarding Form with Bootstrap 5 .was-validated -->
+                          <form id="vendorOnboardingForm" novalidate>
+                            
+                            <!-- ===================================================
+                                 STEP 1: GENERAL COMPANY PROFILE & TAX INFO
+                                 =================================================== -->
+                            <div class="step-content-pane active" id="stepPane_1">
+                              <h4 class="h6 fw-bold text-dark border-bottom pb-2 mb-3">
+                                <i class="bi bi-building text-primary me-2"></i> Step 1: General Company Profile & Tax Info
+                              </h4>
+
+                              <div class="row g-3">
+                                <div class="col-md-6">
+                                  <label for="vendorLegalName" class="form-label">
+                                    Company Legal Name <span class="text-danger">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" id="vendorLegalName" required placeholder="e.g., Acme Global Logistics LLC">
+                                  <div class="invalid-feedback">Action Required: Enter registered legal company name.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label for="vendorEmail" class="form-label">
+                                    Corporate Contact Email <span class="text-danger">*</span>
+                                  </label>
+                                  <input type="email" class="form-control" id="vendorEmail" required placeholder="compliance@company.com">
+                                  <div class="invalid-feedback">Action Required: Enter a valid corporate email address.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label for="vendorCategory" class="form-label">
+                                    Business Category <span class="text-danger">*</span>
+                                  </label>
+                                  <select class="form-select" id="vendorCategory" required>
+                                    <option value="Logistics / Freight">Logistics / Freight</option>
+                                    <option value="IT / Cloud Services">IT / Cloud Services</option>
+                                    <option value="Manufacturing / Raw Materials">Manufacturing / Raw Materials</option>
+                                    <option value="Consulting / Professional Services">Consulting / Professional Services</option>
+                                  </select>
+                                  <div class="form-helper-text">Category dynamically dictates required compliance documentation.</div>
+                                </div>
+
+                                <!-- EIN with Simulated Promise Verification & Loading Spinner -->
+                                <div class="col-md-6">
+                                  <label for="vendorEin" class="form-label">
+                                    US Federal EIN / Tax ID <span class="text-danger">*</span>
+                                  </label>
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" id="vendorEin" placeholder="XX-XXXXXXX" pattern="^(\d{2}-?\d{7})$" required>
+                                    <button class="btn btn-outline-primary" type="button" id="btnVerifyEin">
+                                      <span class="spinner-border spinner-border-sm d-none me-1" id="einSpinner" role="status" aria-hidden="true"></span>
+                                      <span>Verify EIN</span>
+                                    </button>
+                                  </div>
+                                  <div class="invalid-feedback">Action Required: Valid 9-digit EIN required (XX-XXXXXXX).</div>
+                                  <div>
+                                    <span id="einStatusBadge" class="d-none"></span>
+                                  </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label for="vendorDba" class="form-label">
+                                    Doing Business As (DBA / Trade Name)
+                                  </label>
+                                  <input type="text" class="form-control" id="vendorDba" placeholder="e.g., Acme Freightways">
+                                  <div class="form-helper-text">Optional trade or brand identifier.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label for="vendorPhone" class="form-label">
+                                    Business Phone Number <span class="text-danger">*</span>
+                                  </label>
+                                  <input type="tel" class="form-control" id="vendorPhone" required placeholder="+1 (555) 000-0000">
+                                  <div class="invalid-feedback">Action Required: Enter telephone contact.</div>
+                                </div>
+
+                                <div class="col-12">
+                                  <label for="vendorAddress" class="form-label">
+                                    Corporate Physical Address <span class="text-danger">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" id="vendorAddress" required placeholder="Street Address, City, State, ZIP Code">
+                                  <div class="invalid-feedback">Action Required: Physical address is required for regulatory audit.</div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- ===================================================
+                                 STEP 2: COMPLIANCE DOCUMENT STACK
+                                 WEEK 2: DocumentUploadRow components with live file name display & status icon
+                                 =================================================== -->
+                            <div class="step-content-pane" id="stepPane_2">
+                              <h4 class="h6 fw-bold text-dark border-bottom pb-2 mb-3">
+                                <i class="bi bi-file-earmark-check text-primary me-2"></i> Step 2: Compliance Document Stack
+                              </h4>
+                              <p class="text-muted small mb-3">
+                                Attach valid PDF documents for each required certification (W-9, Certificate of Insurance, NDA, and Category Requirements). Expiration dates must be in the future to maintain compliant standing.
+                              </p>
+
+                              <!-- Dynamic DocumentUploadRow Container (Category-driven) -->
+                              <div id="dynamicDocsContainer">
+                                <!-- Injected dynamically by PortalUI.renderDynamicDocs -->
+                              </div>
+                            </div>
+
+                            <!-- ===================================================
+                                 STEP 3: REVIEW & FINAL SUBMISSION
+                                 WEEK 2: Review summary before submit & legal attestation
+                                 =================================================== -->
+                            <div class="step-content-pane" id="stepPane_3">
+                              <h4 class="h6 fw-bold text-dark border-bottom pb-2 mb-3">
+                                <i class="bi bi-clipboard2-check text-primary me-2"></i> Step 3: Review & Final Submission Summary
+                              </h4>
+                              <p class="text-muted small mb-3">
+                                Inspect all entered profile data, verified EIN status, and attached compliance certifications before final submission.
+                              </p>
+
+                              <!-- Live Review Summary Card -->
+                              <div id="reviewSummaryContainer" class="mb-4">
+                                <!-- Populated dynamically by PortalUI -->
+                              </div>
+
+                              <!-- Attestation Checkbox -->
+                              <div class="card border-primary-subtle bg-light p-3 mb-3">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" id="certifyAgreement" required>
+                                  <label class="form-check-label fw-semibold text-dark small" for="certifyAgreement">
+                                    I certify under penalty of perjury that all submitted corporate information and compliance certifications are authentic, unexpired, and accurate representations of our business operations. <span class="text-danger">*</span>
+                                  </label>
+                                  <div class="invalid-feedback">Action Required: You must certify compliance declaration to proceed.</div>
+                                </div>
+                              </div>
+
+                              <div class="row g-3">
+                                <div class="col-md-8">
+                                  <label for="signatoryName" class="form-label">
+                                    Authorized Signatory Full Legal Name <span class="text-danger">*</span>
+                                  </label>
+                                  <input type="text" class="form-control" id="signatoryName" required placeholder="e.g., Jane M. Doe, Chief Financial Officer">
+                                  <div class="invalid-feedback">Action Required: Signatory name must be provided.</div>
+                                </div>
+                                <div class="col-md-4">
+                                  <label for="attestationDate" class="form-label">
+                                    Attestation Date
+                                  </label>
+                                  <input type="text" class="form-control bg-light" id="attestationDate" readonly value="Today">
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Wizard Footer Actions -->
+                            <div class="d-flex justify-content-between align-items-center pt-4 mt-4 border-top">
+                              <button type="button" class="btn btn-portal-secondary d-none" id="btnFormPrev">
+                                <i class="bi bi-arrow-left me-1"></i> Previous Step
+                              </button>
+                              
+                              <div class="ms-auto d-flex gap-2">
+                                <button type="button" class="btn btn-portal-primary" id="btnFormNext">
+                                  Save & Continue <i class="bi bi-arrow-right ms-1"></i>
+                                </button>
+                                <button type="button" class="btn btn-success d-none" id="btnFormSubmit">
+                                  <i class="bi bi-send-check me-1"></i> Submit Dossier for Review
+                                </button>
+                              </div>
+                            </div>
+
+                          </form>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sub-tab 2: Self-Service Compliance Status Tracker -->
+                <div class="tab-pane fade" id="vendorTabStatus" role="tabpanel" aria-labelledby="tabVendorStatusBtn">
+                  <div class="row justify-content-center">
+                    <div class="col-xl-8 col-lg-10">
+                      <div class="portal-card" id="vendorStatusCard">
+                        <div class="card-body p-4 text-center py-5">
+                          <i class="bi bi-shield-check text-primary display-4 mb-3"></i>
+                          <h4 class="h5 fw-bold text-dark">Active Compliance Profile</h4>
+                          <p class="text-muted small">No active vendor profile submitted in the current session. Complete the onboarding wizard to view live review progress.</p>
+                          <button type="button" class="btn btn-portal-primary btn-sm" onclick="document.getElementById('tabVendorWizardBtn').click()">
+                            Open Onboarding Wizard
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+
+            <!-- ===============================================================
+                 VIEW PANEL 3: #view-manager (Procurement Manager Compliance Dashboard)
+                 WEEK 1 & 2: Manager Requirement Builder & Stage 2 Vendor Approvals
+                 =============================================================== -->
+            <section id="view-manager" class="portal-view-container d-none" aria-label="Procurement Manager Compliance Dashboard">
+              
+              <!-- Manager Top Navigation Tabs -->
+              <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                  <h2 class="h5 fw-bold text-dark mb-1">Procurement Management Workspace</h2>
+                  <div class="text-muted small">Configure compliance checklists, authorize vendors, and monitor expiration horizons.</div>
+                </div>
+
+                <ul class="nav nav-pills" id="managerWorkspaceTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active btn-sm" id="mgrTabRegisterBtn" data-bs-toggle="pill" data-bs-target="#mgrTabRegisterPane" type="button" role="tab" aria-controls="mgrTabRegisterPane" aria-selected="true">
+                      <i class="bi bi-table me-1"></i> 1. Compliance Register &amp; KPIs
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-sm" id="mgrTabApprovalsBtn" data-bs-toggle="pill" data-bs-target="#mgrTabApprovalsPane" type="button" role="tab" aria-controls="mgrTabApprovalsPane" aria-selected="false">
+                      <i class="bi bi-person-check me-1"></i> 2. Vendor Sign-Up Approvals
+                      <span class="badge bg-danger ms-1" id="managerPendingVendorCountBadge">0</span>
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-sm" id="mgrTabRequirementsBtn" data-bs-toggle="pill" data-bs-target="#mgrTabRequirementsPane" type="button" role="tab" aria-controls="mgrTabRequirementsPane" aria-selected="false">
+                      <i class="bi bi-sliders me-1"></i> 3. Requirement Builder
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="tab-content" id="managerWorkspaceTabContent">
+                
+                <!-- TAB PANE 1: MASTER COMPLIANCE REGISTER & ANALYTICS -->
+                <div class="tab-pane fade show active" id="mgrTabRegisterPane" role="tabpanel" aria-labelledby="mgrTabRegisterBtn">
+                  <!-- Tier 1 Critical Risk Alert Banner -->
+                  <div id="tier1RiskAlertBanner" class="alert alert-danger border-danger d-flex align-items-center justify-content-between fade show mb-4 d-none" role="alert">
+                    <div class="d-flex align-items-center gap-3">
+                      <i class="bi bi-exclamation-octagon-fill fs-3 text-danger"></i>
+                      <div>
+                        <strong class="text-danger">Action Required: Tier 1 High-Risk Vendor Detected</strong>
+                        <div class="small text-danger-emphasis">
+                          <span id="tier1RiskCount" class="fw-bold">1</span> vendor has critical compliance violations or expired certifications (conservative 1-expired-doc rule enforced).
+                        </div>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-danger px-3" onclick="document.getElementById('filterRiskTier').value='Tier 1'; document.getElementById('filterRiskTier').dispatchEvent(new Event('change'));">
+                      Filter Tier 1
+                    </button>
+                  </div>
+
+                  <!-- Executive KPI Summary Cards Row (WEEK 3 Deliverable) -->
+                  <div class="row g-3 mb-4" id="managerKpiRow">
+                    <div class="col-6 col-md-4 col-xl">
+                      <div class="portal-card kpi-card h-100 p-3">
+                        <div class="kpi-title">Total Onboarded</div>
+                        <div class="kpi-value mt-2" id="kpiTotalVendors">--</div>
+                        <div class="small text-muted mt-1"><i class="bi bi-database me-1"></i> Active DB Profiles</div>
+                      </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 col-xl">
+                      <div class="portal-card kpi-card kpi-compliant h-100 p-3">
+                        <div class="kpi-title text-success">Compliant Vendors</div>
+                        <div class="kpi-value text-success mt-2" id="kpiCompliant">--</div>
+                        <div class="small text-success mt-1"><i class="bi bi-check2-circle me-1"></i> 100% Validated</div>
+                      </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 col-xl">
+                      <div class="portal-card kpi-card kpi-pending h-100 p-3">
+                        <div class="kpi-title text-warning-emphasis">Pending Review</div>
+                        <div class="kpi-value text-warning-emphasis mt-2" id="kpiPending">--</div>
+                        <div class="small text-muted mt-1"><i class="bi bi-hourglass-split me-1"></i> Awaiting Approval</div>
+                      </div>
+                    </div>
+
+                    <div class="col-6 col-md-6 col-xl">
+                      <div class="portal-card kpi-card kpi-pending h-100 p-3">
+                        <div class="kpi-title text-warning-emphasis">Expiring Documents (&lt; 30/60/90 days)</div>
+                        <div class="kpi-value text-warning-emphasis mt-2" id="kpiExpiringSoon">--</div>
+                        <div class="small text-muted mt-1"><i class="bi bi-clock-history me-1"></i> Horizon Risk Watch</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xl">
+                      <div class="portal-card kpi-card kpi-danger h-100 p-3">
+                        <div class="kpi-title text-danger">Blocked Vendors</div>
+                        <div class="kpi-value text-danger mt-2" id="kpiBlocked">--</div>
+                        <div class="small text-danger mt-1"><i class="bi bi-shield-x me-1"></i> 1-Expired Downgrade</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Executive Analytics Charts Row (WEEK 4 Deliverable) -->
+                  <div class="row g-3 mb-4" id="managerAnalyticsSection">
+                    <div class="col-lg-5">
+                      <div class="portal-card h-100">
+                        <div class="portal-card-header d-flex justify-content-between align-items-center">
+                          <span class="fw-bold text-dark fs-6">Compliance Status Distribution</span>
+                          <span class="badge bg-light text-muted border">Real-Time</span>
+                        </div>
+                        <div class="portal-card-body">
+                          <div class="chart-wrapper">
+                            <canvas id="complianceStatusChart" role="img" aria-label="Compliance Status Doughnut Chart"></canvas>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                      <div class="portal-card h-100">
+                        <div class="portal-card-header d-flex justify-content-between align-items-center">
+                          <span class="fw-bold text-dark fs-6">Vendors by Risk Tier &amp; Category</span>
+                          <span class="badge bg-light text-muted border">Risk &amp; Category</span>
+                        </div>
+                        <div class="portal-card-body">
+                          <div class="chart-wrapper">
+                            <canvas id="riskTierChart" role="img" aria-label="Vendors by Risk Tier and Category Bar Chart"></canvas>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Master Vendor Register Card -->
+                  <div class="portal-card mb-4" id="managerTableCard">
+                    <div class="portal-card-header">
+                      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+                        <div>
+                          <div class="d-flex align-items-center gap-2">
+                            <h3 class="h6 fw-bold text-dark mb-0">Master Vendor Compliance Register</h3>
+                            <span id="vendorFilteredCount" class="badge bg-secondary">0 Records</span>
+                          </div>
+                          <div class="text-muted small">Real-time keyword search, risk tier scoring, and compliance review</div>
+                        </div>
+
+                        <!-- Export Actions (WEEK 4: Export to CSV & Export to PDF) -->
+                        <div class="d-flex gap-2">
+                          <button type="button" class="btn btn-outline-secondary btn-sm" id="btnExportCSV" aria-label="Export Records to CSV">
+                            <i class="bi bi-filetype-csv me-1"></i> Export to CSV
+                          </button>
+                          <button type="button" class="btn btn-portal-primary btn-sm" id="btnExportPDF" aria-label="Export Records to PDF">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Export to PDF
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Criteria Toolbar (Search & Filter Inputs) -->
+                      <div class="row g-2 mt-3 pt-3 border-top">
+                        <!-- Keyword Search -->
+                        <div class="col-md-4">
+                          <label for="vendorSearchInput" class="visually-hidden">Search Vendors</label>
+                          <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white border-end-0">
+                              <i class="bi bi-search text-muted"></i>
+                            </span>
+                            <input type="text" 
+                                   id="vendorSearchInput" 
+                                   class="form-control border-start-0" 
+                                   placeholder="Search vendor name, EIN, DBA..." 
+                                   aria-label="Search vendor records">
+                            <button class="btn btn-outline-secondary d-none" type="button" id="btnClearSearch" aria-label="Clear Search Input">
+                              <i class="bi bi-x"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Status Filter (WEEK 3: All, Approved, Pending, Blocked) -->
+                        <div class="col-6 col-md-2">
+                          <label for="filterStatus" class="visually-hidden">Filter Status</label>
+                          <select id="filterStatus" class="form-select form-select-sm" aria-label="Filter by Compliance Status">
+                            <option value="all">Status: All</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Blocked">Blocked</option>
+                          </select>
+                        </div>
+
+                        <!-- Risk Tier Filter -->
+                        <div class="col-6 col-md-2">
+                          <label for="filterRiskTier" class="visually-hidden">Filter Risk Tier</label>
+                          <select id="filterRiskTier" class="form-select form-select-sm" aria-label="Filter by Risk Tier">
+                            <option value="all">Risk: All Tiers</option>
+                            <option value="Tier 1">Tier 1 - High Risk</option>
+                            <option value="Tier 2">Tier 2 - Medium</option>
+                            <option value="Tier 3">Tier 3 - Low</option>
+                          </select>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="col-6 col-md-2">
+                          <label for="filterCategory" class="visually-hidden">Filter Category</label>
+                          <select id="filterCategory" class="form-select form-select-sm" aria-label="Filter by Business Category">
+                            <option value="all">Category: All</option>
+                            <option value="Logistics / Freight">Logistics</option>
+                            <option value="IT / Cloud Services">IT &amp; Cloud</option>
+                            <option value="Manufacturing / Raw Materials">Manufacturing</option>
+                            <option value="Consulting / Professional Services">Consulting</option>
+                          </select>
+                        </div>
+
+                        <!-- Reset Button -->
+                        <div class="col-6 col-md-2 text-end">
+                          <button type="button" class="btn btn-outline-secondary btn-sm w-100" id="btnResetFilters" aria-label="Reset all search filters">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- 30/60/90-Day Expiry Widget Pill Controls -->
+                      <div class="d-flex align-items-center gap-2 mt-2 pt-2 border-top">
+                        <span class="small fw-semibold text-muted">Document Horizon:</span>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Expiration Horizon Filter" id="expiringFilterGroup">
+                          <button type="button" class="btn btn-portal-primary active" data-expiring-filter="all">All Vendors</button>
+                          <button type="button" class="btn btn-portal-secondary" data-expiring-filter="30">Expiring in &lt; 30d</button>
+                          <button type="button" class="btn btn-portal-secondary" data-expiring-filter="60">Expiring in &lt; 60d</button>
+                          <button type="button" class="btn btn-portal-secondary" data-expiring-filter="90">Expiring in &lt; 90d</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 1. DESKTOP VIEW (≥ 768px): Full Table with 7 Sortable Columns -->
+                    <div class="table-responsive">
+                      <table class="table table-portal align-middle table-hover d-none d-md-table" aria-label="Vendor Directory Table">
+                        <thead>
+                          <tr>
+                            <th class="sortable" data-sort="name" scope="col" tabindex="0" aria-label="Sort by Company Name">
+                              Company Name <i class="bi bi-arrow-down-up text-muted ms-1 small"></i>
+                            </th>
+                            <th class="sortable" data-sort="category" scope="col" tabindex="0" aria-label="Sort by Category">
+                              Category <i class="bi bi-arrow-down-up text-muted ms-1 small"></i>
+                            </th>
+                            <th class="sortable" data-sort="submissionDate" scope="col" tabindex="0" aria-label="Sort by Submission Date">
+                              Submission Date <i class="bi bi-arrow-down-up text-muted ms-1 small"></i>
+                            </th>
+                            <th class="sortable" data-sort="expiryDate" scope="col" tabindex="0" aria-label="Sort by Expiration Date">
+                              Expiration Date <i class="bi bi-arrow-down-up text-muted ms-1 small"></i>
+                            </th>
+                            <th class="sortable" data-sort="tier" scope="col" tabindex="0" aria-label="Sort by Risk Tier">
+                              Risk Tier <i class="bi bi-arrow-down-up text-muted ms-1 small"></i>
+                            </th>
+                            <th class="sortable" data-sort="status" scope="col" tabindex="0" aria-label="Sort by Status Badge">
+                              Status Badge <i class="bi bi-arrow-down-up text-muted ms-1 small"></i>
+                            </th>
+                            <th scope="col" class="text-end">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="vendorTableBody">
+                          <!-- Populated dynamically by PortalUI.renderVendorTable -->
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- 2. MOBILE VIEW (< 768px): Stacked Responsive Cards -->
+                    <div class="d-md-none p-3" id="vendorCardsContainer" aria-label="Vendor Cards Mobile List">
+                      <!-- Populated dynamically for mobile devices -->
+                    </div>
+
+                    <!-- Empty State Component -->
+                    <div id="vendorEmptyState" class="empty-state-card d-none">
+                      <div class="empty-state-icon">
+                        <i class="bi bi-inbox"></i>
+                      </div>
+                      <h4 class="h5 fw-bold text-dark">No vendors require review at this time</h4>
+                      <p class="text-muted small mb-3">All matching vendor dossiers have been processed or no records match the active search filter.</p>
+                      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="window.PortalUI.resetFilters()">
+                        Reset Filters
+                      </button>
+                    </div>
+
+                    <!-- Pagination Footer -->
+                    <div class="portal-card-header d-flex justify-content-between align-items-center py-2">
+                      <span class="text-muted small">Showing paginated results</span>
+                      <nav id="tablePagination" aria-label="Table Page Navigation"></nav>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- TAB PANE 2: VENDOR SIGN-UP APPROVAL QUEUE (STAGE 2) -->
+                <div class="tab-pane fade" id="mgrTabApprovalsPane" role="tabpanel" aria-labelledby="mgrTabApprovalsBtn">
+                  <div class="portal-card mb-4">
+                    <div class="portal-card-header bg-white d-flex justify-content-between align-items-center">
+                      <div>
+                        <h3 class="h6 fw-bold text-dark mb-0">Vendor Sign-Up Approvals (Stage 2 Gate)</h3>
+                        <div class="text-muted small">Authorize newly registered supplier accounts to unlock their onboarding dashboard</div>
+                      </div>
+                      <span class="badge bg-primary">Hierarchical Chain of Command</span>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table table-portal align-middle table-hover mb-0" aria-label="Vendor Approval Queue">
+                        <thead>
+                          <tr>
+                            <th scope="col">Vendor Organization</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Registration Date</th>
+                            <th scope="col">Approval State</th>
+                            <th scope="col" class="text-end">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="managerPendingVendorsTableBody">
+                          <!-- Injected dynamically by app.js -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- TAB PANE 3: MANAGER COMPLIANCE REQUIREMENT BUILDER -->
+                <div class="tab-pane fade" id="mgrTabRequirementsPane" role="tabpanel" aria-labelledby="mgrTabRequirementsBtn">
+                  <div class="portal-card mb-4">
+                    <div class="portal-card-header bg-white">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <h3 class="h6 fw-bold text-dark mb-0">Compliance Requirement Builder</h3>
+                          <div class="text-muted small">Define required document counts, custom compliance file types, and vendor submission deadlines</div>
+                        </div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">
+                          <i class="bi bi-hdd-network-fill me-1"></i> Persists to LocalDB
+                        </span>
+                      </div>
+                    </div>
+                    <div class="portal-card-body p-4">
+                      <form id="managerRequirementForm" novalidate>
+                        
+                        <div class="row g-3 mb-4">
+                          <div class="col-md-6">
+                            <label for="reqDocCountInput" class="form-label small fw-semibold text-dark">
+                              Minimum Required Documents Count <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control" id="reqDocCountInput" min="1" max="10" value="3" required>
+                            <div class="form-text">Mandates how many verified documents a vendor must attach before submitting.</div>
+                          </div>
+                          
+                          <div class="col-md-6">
+                            <label for="reqSubmissionDeadline" class="form-label small fw-semibold text-dark">
+                              Submission Deadline (Date Picker) <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" class="form-control" id="reqSubmissionDeadline" required>
+                            <div class="form-text">Triggers live countdown banner on active Vendor workspaces.</div>
+                          </div>
+                        </div>
+
+                        <div class="border-top pt-3 mb-3">
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                              <h5 class="h6 fw-bold text-dark mb-0">Custom Document Types &amp; Compliance Pack</h5>
+                              <div class="text-muted small">Specify required document names (e.g. GST Certificate, ISO 27001, Carrier Liability)</div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddCustomDocType">
+                              <i class="bi bi-plus-circle me-1"></i> Add Document Type
+                            </button>
+                          </div>
+
+                          <!-- Dynamic Custom Document Types List -->
+                          <div id="customDocTypesList" class="mb-3">
+                            <!-- Injected by app.js -->
+                          </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                          <button type="submit" class="btn btn-portal-primary px-4 fw-semibold">
+                            <i class="bi bi-save me-1"></i> Save &amp; Publish Requirements
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </section>
+
+          </main>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODALS: Review Modal, Audit Trail, Document Preview & Settings
+       ========================================================================= -->
+  
+  <!-- MODAL 1: VENDOR REVIEW MODAL -->
+  <div class="modal fade" id="vendorReviewModal" tabindex="-1" aria-labelledby="vendorReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-light border-bottom">
+          <div>
+            <span class="badge bg-primary text-white mb-1" id="reviewModalVendorId">VEN-0000</span>
+            <h5 class="modal-title fw-bold text-dark" id="vendorReviewModalLabel">
+              <span id="reviewModalVendorName">Vendor Dossier</span>
+            </h5>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Review Modal"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <div class="row g-2 mb-3 small">
+            <div class="col-md-4">
+              <div class="p-2 border rounded bg-light">
+                <span class="text-muted d-block">Category:</span>
+                <strong id="reviewModalCategory" class="text-dark">--</strong>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="p-2 border rounded bg-light">
+                <span class="text-muted d-block">Risk Rating:</span>
+                <div id="reviewModalRiskTier">--</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="p-2 border rounded bg-light">
+                <span class="text-muted d-block">EIN / Tax ID:</span>
+                <strong id="reviewModalEin" class="text-dark">--</strong>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-2 border rounded bg-light">
+                <span class="text-muted d-block">Compliance Contact:</span>
+                <strong id="reviewModalContact" class="text-dark">--</strong>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-2 border rounded bg-light">
+                <span class="text-muted d-block">Business Email:</span>
+                <strong id="reviewModalTerms" class="text-dark">--</strong>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
+            <i class="bi bi-files text-primary me-1"></i> Compliance Documentation Checklist
+          </h6>
+          <div id="reviewModalDocsList">
+            <!-- Injected by PortalUI.openReviewModal -->
+          </div>
+
+          <!-- Mandatory Rejection Reason Section -->
+          <div id="reviewRejectionSection" class="card border-danger mt-3 bg-danger-subtle bg-opacity-25 p-3 d-none">
+            <h6 class="fw-bold text-danger mb-2">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i> Provide Mandatory Rejection / Revision Reason
+            </h6>
+            <div class="mb-3">
+              <label for="reviewRejectionReason" class="form-label text-dark small fw-semibold">
+                Reason for Rejection <span class="text-danger">*</span>
+              </label>
+              <textarea class="form-control" id="reviewRejectionReason" rows="3" placeholder="Specify document discrepancy, expired policy, or regulatory requirement..."></textarea>
+              <div class="invalid-feedback">Action Required: Rejection reason cannot be blank.</div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCancelReject">Cancel</button>
+              <button type="button" class="btn btn-danger btn-sm" id="btnConfirmReject">
+                <i class="bi bi-x-circle me-1"></i> Confirm Rejection
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer bg-light border-top">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <div class="ms-auto d-flex gap-2">
+            <button type="button" class="btn btn-danger btn-sm" id="btnReviewRejectToggle">
+              <i class="bi bi-x-circle me-1"></i> Reject Vendor
+            </button>
+            <button type="button" class="btn btn-success btn-sm" id="btnReviewApprove">
+              <i class="bi bi-check2-circle me-1"></i> Approve Vendor
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: AUDIT TRAIL MODAL -->
+  <div class="modal fade" id="auditTrailModal" tabindex="-1" aria-labelledby="auditTrailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <div>
+            <h5 class="modal-title fw-bold text-dark" id="auditTrailModalLabel">Audit Trail History</h5>
+            <div class="text-muted small" id="auditModalVendorName">Vendor Dossier</div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Audit Modal"></button>
+        </div>
+        <div class="modal-body p-4" id="auditModalTimeline">
+          <!-- Injected by PortalUI.openAuditModal -->
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: DOCUMENT PREVIEW MODAL -->
+  <div class="modal fade" id="documentPreviewModal" tabindex="-1" aria-labelledby="documentPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <div>
+            <h5 class="modal-title fw-bold text-dark" id="documentPreviewModalLabel">
+              <i class="bi bi-file-earmark-pdf-fill text-danger me-2"></i>
+              <span id="docPreviewTitle">Document Preview</span>
+            </h5>
+            <div class="text-muted small" id="docPreviewMeta">Quota-Safe Verified PDF Stub</div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Document Preview"></button>
+        </div>
+        <div class="modal-body p-4 text-center bg-slate-50">
+          <div class="p-5 border rounded bg-white shadow-sm my-2">
+            <i class="bi bi-file-earmark-lock display-3 text-secondary mb-3"></i>
+            <h5 class="fw-bold text-dark" id="docPreviewVendor">Vendor Compliance Certificate</h5>
+            <p class="text-muted small mb-3">
+              Document certified and registered in LocalDB metadata. Quota-safe metadata extracted to respect client storage limits.
+            </p>
+            <div class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+              <i class="bi bi-patch-check-fill me-1"></i> SHA-256 Checksum Verified
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close Preview</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: SYSTEM SETTINGS & LOCALDB STATE MODAL -->
+  <div class="modal fade" id="systemSettingsModal" tabindex="-1" aria-labelledby="systemSettingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title fw-bold text-dark" id="systemSettingsModalLabel">
+            <i class="bi bi-gear-wide-connected me-2 text-primary"></i> System Settings &amp; LocalDB State
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Settings"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="alert alert-light border small text-muted mb-3">
+            <i class="bi bi-info-circle-fill text-primary me-1"></i>
+            <strong>LocalDB Partitioned Engine:</strong> State is segregated across <code>vendors_db</code>, <code>audit_logs</code>, <code>mock_api_cache</code>, and <code>system_settings</code>.
+          </div>
+
+          <div class="list-group list-group-flush small mb-4">
+            <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+              <span>Conservative 1-Expired-Doc Cascade Rule</span>
+              <span class="badge bg-success">Active / Enforced</span>
+            </div>
+            <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+              <span>Risk Scoring Engine Horizon</span>
+              <span class="text-dark fw-bold">30 / 60 / 90 Days</span>
+            </div>
+            <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+              <span>Quota-Safe PDF Metadata Mode</span>
+              <span class="text-success fw-bold">Enabled</span>
+            </div>
+            <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+              <span>4-Tier Role Chain of Command</span>
+              <span class="badge bg-primary">Hierarchical Guarded</span>
+            </div>
+          </div>
+
+          <h6 class="fw-bold text-dark small border-bottom pb-2 mb-3">
+            <i class="bi bi-arrow-down-up text-primary me-1"></i> JSON State Portability &amp; Persistence (Abhinaba Das)
+          </h6>
+          
+          <div class="d-grid gap-2 mb-3">
+            <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center gap-2" id="btnExportLocalDBJSON">
+              <i class="bi bi-download"></i>
+              <span>Export Full State (Download JSON)</span>
+            </button>
+            
+            <label class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center gap-2 mb-0" for="inputImportLocalDBJSON" style="cursor: pointer;">
+              <i class="bi bi-upload"></i>
+              <span>Import State from JSON File</span>
+            </label>
+            <input type="file" id="inputImportLocalDBJSON" accept=".json,application/json" class="d-none">
+          </div>
+
+          <div class="border-top pt-3">
+            <button type="button" class="btn btn-outline-danger btn-sm w-100" id="btnResetLocalDBToSeed">
+              <i class="bi bi-arrow-counterclockwise me-1"></i> Reset to Factory Initial Seed
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SCRIPTS: Bootstrap 5.3 + Chart.js + Modular Controllers (Abhinaba Das & Maaz Khan)
+       ========================================================================= -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <!-- 1. Core Partitioned Storage Engine (Abhinaba Das - Week 1 Deliverable) -->
+  <script src="js/localdb.js"></script>
+
+  <!-- 2. Offline Firebase Auth Controller & 4-Tier Chain of Command (Abhinaba Das - Week 1 & 2 Deliverable) -->
+  <script src="js/auth.js"></script>
+
+  <!-- 3. Master Frontend UI Module (Mohd. Maaz Khan Deliverable) -->
+  <script src="js/ui.js"></script>
+
+  <!-- 4. Master Application Controller, SPA Switcher & Dynamic DOM (Abhinaba Das - Week 2 Deliverable) -->
+  <script src="js/app.js"></script>
+
+</body>
+</html>
+
+</body>
+</html>

@@ -1,0 +1,764 @@
+:root {
+  --portal-navy: #0A2540;
+  --portal-navy-hover: #0D2E5C;
+  --portal-navy-dark: #061626;
+  --portal-navy-light: #163e6e;
+  --portal-bg-canvas: #F8FAFC;
+  --portal-card-bg: #FFFFFF;
+  --portal-slate-50: #F8FAFC;
+  --portal-slate-100: #F1F5F9;
+  --portal-slate-200: #E2E8F0;
+  --portal-slate-400: #94A3B8;
+  --portal-slate-600: #64748B;
+  --portal-slate-800: #1E293B;
+  --portal-slate-900: #0F172A;
+
+  --portal-success: #198754;
+  --portal-success-subtle: #d1e7dd;
+  --portal-warning: #b45309;
+  --portal-warning-bg: #fef3c7;
+  --portal-danger: #DC3545;
+  --portal-danger-subtle: #f8d7da;
+  
+  --portal-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --portal-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  --portal-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --portal-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+}
+
+/* ==========================================================================
+   Base & Typography
+   ========================================================================== */
+body {
+  font-family: var(--portal-font-family);
+  background-color: var(--portal-bg-canvas);
+  color: var(--portal-slate-900);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* High Contrast Focus State for Accessibility (WCAG 2.1 AA) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--portal-navy-hover) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(13, 46, 92, 0.15) !important;
+}
+
+/* ==========================================================================
+   Structural Layout & Sticky Sidebar
+   ========================================================================== */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Desktop Sidebar */
+.portal-sidebar {
+  background-color: var(--portal-navy);
+  color: #FFFFFF;
+  min-height: 100vh;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease-in-out;
+  z-index: 1020;
+}
+
+@media (min-width: 992px) {
+  .portal-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+/* User Profile Badge in Sidebar */
+.user-profile-badge {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: background 0.2s ease;
+}
+
+.user-profile-badge:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.user-avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #38BDF8;
+  color: var(--portal-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* Auth Role Selection Cards (#view-auth) */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Conceal authenticated workspace shell when role selection view is active */
+#view-auth:not(.d-none) ~ #portalAppShell {
+  display: none !important;
+}
+
+.auth-role-card {
+  border: 2px solid var(--portal-slate-200);
+  border-radius: 12px;
+  background-color: #FFFFFF;
+  padding: 2rem;
+  transition: all 0.25s ease-in-out;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-role-card:hover {
+  border-color: var(--portal-navy-hover);
+  box-shadow: var(--portal-shadow-lg);
+  transform: translateY(-3px);
+}
+
+.auth-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.auth-icon-manager {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+}
+
+.auth-icon-vendor {
+  background-color: #F0FDF4;
+  color: #15803D;
+}
+
+.portal-sidebar .brand-badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.12);
+  color: #E2E8F0;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.portal-sidebar .nav-link {
+  color: #CBD5E1;
+  font-weight: 500;
+  font-size: 0.925rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  margin-bottom: 0.25rem;
+}
+
+.portal-sidebar .nav-link i {
+  font-size: 1.15rem;
+  color: #94A3B8;
+  transition: color 0.2s ease;
+}
+
+.portal-sidebar .nav-link:hover {
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.portal-sidebar .nav-link:hover i {
+  color: #FFFFFF;
+}
+
+.portal-sidebar .nav-link.active {
+  color: #FFFFFF;
+  background-color: var(--portal-navy-hover);
+  box-shadow: inset 3px 0 0 #38BDF8;
+  font-weight: 600;
+}
+
+.portal-sidebar .nav-link.active i {
+  color: #38BDF8;
+}
+
+/* Mobile Offcanvas Sidebar styling */
+.offcanvas.portal-offcanvas {
+  background-color: var(--portal-navy);
+  color: #FFFFFF;
+  max-width: 280px;
+}
+
+.offcanvas.portal-offcanvas .btn-close-white {
+  filter: invert(1);
+}
+
+/* ==========================================================================
+   Header & Topbar
+   ========================================================================== */
+.portal-topbar {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--portal-slate-200);
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1010;
+}
+
+.role-pill {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.role-pill-superadmin {
+  background-color: #FAF5FF;
+  color: #7E22CE;
+  border: 1px solid #E9D5FF;
+}
+
+.role-pill-admin {
+  background-color: #FFF7ED;
+  color: #C2410C;
+  border: 1px solid #FFEDD5;
+}
+
+.role-pill-vendor {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.role-pill-manager {
+  background-color: #F0FDF4;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+/* ==========================================================================
+   Cards & Corporate Trust Surfaces
+   ========================================================================== */
+.portal-card {
+  background: var(--portal-card-bg);
+  border: 1px solid var(--portal-slate-200);
+  border-radius: 10px;
+  box-shadow: var(--portal-shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.portal-card:hover {
+  box-shadow: var(--portal-shadow-md);
+  border-color: #CBD5E1;
+}
+
+.portal-card-header {
+  padding: 1.125rem 1.5rem;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--portal-slate-200);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.portal-card-body {
+  padding: 1.5rem;
+}
+
+/* KPI Summary Metric Cards */
+.kpi-card {
+  border-left: 4px solid var(--portal-navy);
+}
+
+.kpi-card.kpi-compliant {
+  border-left-color: var(--portal-success);
+}
+
+.kpi-card.kpi-pending {
+  border-left-color: #F59E0B;
+}
+
+.kpi-card.kpi-danger {
+  border-left-color: var(--portal-danger);
+}
+
+.kpi-title {
+  font-size: 0.785rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--portal-slate-600);
+}
+
+.kpi-value {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--portal-slate-900);
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   Multi-Step Onboarding Wizard UI
+   ========================================================================== */
+.stepper-nav {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.stepper-nav::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  right: 24px;
+  height: 3px;
+  background-color: var(--portal-slate-200);
+  z-index: 1;
+}
+
+.stepper-nav-progress {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  height: 3px;
+  background-color: var(--portal-navy);
+  z-index: 2;
+  transition: width 0.35s ease;
+}
+
+.stepper-item {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  background: transparent;
+  flex: 1;
+}
+
+.stepper-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 2px solid var(--portal-slate-400);
+  color: var(--portal-slate-600);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.25s ease;
+}
+
+.stepper-item.active .stepper-circle {
+  background-color: var(--portal-navy);
+  border-color: var(--portal-navy);
+  color: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(10, 37, 64, 0.15);
+}
+
+.stepper-item.completed .stepper-circle {
+  background-color: var(--portal-success);
+  border-color: var(--portal-success);
+  color: #FFFFFF;
+}
+
+.stepper-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--portal-slate-600);
+  display: block;
+}
+
+.stepper-item.active .stepper-label {
+  color: var(--portal-navy);
+}
+
+.stepper-item.completed .stepper-label {
+  color: var(--portal-slate-900);
+}
+
+.step-content-pane {
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.step-content-pane.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Document Upload Rows & Drop Zones
+   ========================================================================== */
+.document-upload-row {
+  border: 1px solid var(--portal-slate-200);
+  border-radius: 8px;
+  padding: 1.15rem;
+  margin-bottom: 1rem;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+}
+
+.document-upload-row:hover {
+  border-color: #CBD5E1;
+  background-color: #FAFAFC;
+}
+
+.document-upload-row.is-uploaded {
+  border-color: #BBF7D0;
+  background-color: #F8FCF9;
+}
+
+.document-upload-row.is-expired {
+  border-color: #FECACA;
+  background-color: #FFF8F8;
+}
+
+.doc-badge-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Upload Dropzone Container */
+.file-drop-zone {
+  border: 2px dashed var(--portal-slate-200);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  background-color: var(--portal-slate-50);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-drop-zone:hover,
+.file-drop-zone.dragover {
+  border-color: var(--portal-navy-hover);
+  background-color: #F0F4F8;
+}
+
+/* ==========================================================================
+   Data Table & Mobile Responsive Cards
+   ========================================================================== */
+.table-portal {
+  vertical-align: middle;
+  margin-bottom: 0;
+}
+
+.table-portal th {
+  background-color: var(--portal-slate-50);
+  color: var(--portal-slate-600);
+  font-size: 0.775rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid var(--portal-slate-200);
+  white-space: nowrap;
+}
+
+.table-portal th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.table-portal th.sortable:hover {
+  background-color: #E2E8F0;
+  color: var(--portal-slate-900);
+}
+
+.table-portal td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--portal-slate-200);
+  font-size: 0.885rem;
+}
+
+.table-portal tr:hover td {
+  background-color: #F8FAFC;
+}
+
+/* Mobile Stacked Card Representation (Visible only on < 768px) */
+.vendor-card-mobile {
+  border: 1px solid var(--portal-slate-200);
+  border-radius: 8px;
+  background: #FFFFFF;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: var(--portal-shadow-sm);
+}
+
+.vendor-card-mobile .card-field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed var(--portal-slate-200);
+  font-size: 0.85rem;
+}
+
+.vendor-card-mobile .card-field-row:last-child {
+  border-bottom: none;
+}
+
+.vendor-card-mobile .card-field-label {
+  font-weight: 600;
+  color: var(--portal-slate-600);
+}
+
+/* ==========================================================================
+   Semantic Status Badges
+   ========================================================================== */
+.status-badge {
+  font-size: 0.775rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 50rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1.2;
+}
+
+.status-badge-approved {
+  background-color: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.status-badge-pending {
+  background-color: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.status-badge-blocked {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+/* Risk Tier Badges */
+.tier-badge {
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.tier-badge-1 {
+  background-color: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+}
+
+.tier-badge-2 {
+  background-color: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+
+.tier-badge-3 {
+  background-color: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+
+/* ==========================================================================
+   Chart Layout Containers (Prevents Layout Jitter)
+   ========================================================================== */
+.chart-wrapper {
+  position: relative;
+  height: 270px;
+  width: 100%;
+}
+
+@media (max-width: 576px) {
+  .chart-wrapper {
+    height: 220px;
+  }
+}
+
+/* ==========================================================================
+   Toast Notification Styling
+   ========================================================================== */
+.portal-toast-container {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 1090;
+}
+
+.portal-toast {
+  border-radius: 8px;
+  border-left: 5px solid var(--portal-navy);
+  box-shadow: var(--portal-shadow-lg);
+  min-width: 320px;
+  max-width: 440px;
+}
+
+.portal-toast.toast-success {
+  border-left-color: var(--portal-success);
+}
+
+.portal-toast.toast-danger {
+  border-left-color: var(--portal-danger);
+}
+
+.portal-toast.toast-warning {
+  border-left-color: #F59E0B;
+}
+
+/* ==========================================================================
+   Buttons & Microcopy Elements
+   ========================================================================== */
+.btn-portal-primary {
+  background-color: var(--portal-navy);
+  color: #FFFFFF;
+  border: 1px solid var(--portal-navy);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-portal-primary:hover,
+.btn-portal-primary:focus {
+  background-color: var(--portal-navy-hover);
+  border-color: var(--portal-navy-hover);
+  color: #FFFFFF;
+}
+
+.btn-portal-secondary {
+  background-color: #FFFFFF;
+  color: var(--portal-slate-800);
+  border: 1px solid var(--portal-slate-200);
+  font-weight: 500;
+}
+
+.btn-portal-secondary:hover {
+  background-color: var(--portal-slate-50);
+  border-color: var(--portal-slate-400);
+  color: var(--portal-slate-900);
+}
+
+/* Form Helper Microcopy */
+.form-helper-text {
+  font-size: 0.775rem;
+  color: var(--portal-slate-600);
+  margin-top: 0.3rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--portal-slate-800);
+  margin-bottom: 0.35rem;
+}
+
+/* Empty States */
+.empty-state-card {
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  color: var(--portal-slate-600);
+}
+
+.empty-state-icon {
+  font-size: 3.5rem;
+  color: var(--portal-slate-400);
+  margin-bottom: 1rem;
+}
+
+/* Timeline for Audit Trail */
+.timeline-list {
+  position: relative;
+  list-style: none;
+  padding-left: 28px;
+  margin-bottom: 0;
+}
+
+.timeline-list::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 9px;
+  width: 2px;
+  background-color: var(--portal-slate-200);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -28px;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 2px solid var(--portal-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-dot::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--portal-navy);
+}
+
+.timeline-item.dot-success .timeline-dot {
+  border-color: var(--portal-success);
+}
+.timeline-item.dot-success .timeline-dot::after {
+  background-color: var(--portal-success);
+}
+
+.timeline-item.dot-danger .timeline-dot {
+  border-color: var(--portal-danger);
+}
+.timeline-item.dot-danger .timeline-dot::after {
+  background-color: var(--portal-danger);
+}
